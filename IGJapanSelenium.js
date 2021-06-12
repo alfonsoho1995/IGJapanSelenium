@@ -39,9 +39,9 @@ async function openCrawlerWeb() {
     await driver.sleep(2000);
 
     var brandArray = [
-        // 'mu_mumian',
+        'mu_mumian',
         // 'lexus_jp',
-        'qdymag'
+        // 'qdymag'
     ]
 
     var brandArrayLength = brandArray.length;
@@ -66,14 +66,16 @@ async function openCrawlerWeb() {
     }
 
     async function clickEachPost(driver) {
-        var threeArray = 4;
-        var lengtLine = 2;
+        var threeArray = 3 + 1;
+        var lengtLine = (24/3) + 1; // start from 1 so add 1
+        var count = 0
         for (var j = 1; j < lengtLine; j++) {
             for (var i = 1; i < threeArray; i++) {
                 var igPostLine = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[${j}]/div[${i}]/a/div/div[2]`;
                 await openBatchByBatch(igPostLine);
                 await driver.sleep(1000);
             }
+            console.log(count++);
         }
 
         async function openBatchByBatch() {
@@ -90,35 +92,22 @@ async function openCrawlerWeb() {
         }
     
         async function getTagsEachPost() {
-            console.log('getTagsEachPost start !!!');
-            // body > div._2dDPU.CkGkG > div.zZYga > div > article > div.eo2As > div.EtaWk > ul > div > li > div > div > div.C4VMK
-            // /html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/div/li/div/div/div[2]
-            // var postContentPath = '/html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/div/li/div/div/div[2]/span';
-            // var postContentPath = `/html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/div/li/div/div`;
-            // var postContentPath = '//div[@class="C4VMK"]';
-            
-            // driver.findElement(By.xpath('//div[@class="C4VMK"]')).then(function(element){
-            //     element.getText().then(function(text){
-            //         console.log(text);
-            //     });
+            // fetch each post content
+            // await driver.findElements(By.xpath('//div[@class="C4VMK"]')).then(function(elements){
+            //     for (var i = 0; i < elements.length; i++){
+            //         elements[i].getText().then(function(text){
+            //             console.log(text);
+            //         });
+            //     };
             // });
 
-            // fetch each post content
-            await driver.findElements(By.xpath('//div[@class="C4VMK"]')).then(function(elements){
-                console.log(elements);
+            await driver.findElements(By.xpath('//a[@class=" xil3i"]')).then(function(elements){
                 for (var i = 0; i < elements.length; i++){
-                    console.log(elements[i]);
                     elements[i].getText().then(function(text){
                         console.log(text);
                     });
                 };
             });
-
-            // var postContent = await driver.wait(until.elementLocated(By.xpath(postContentPath)));
-            // var postTags = postContent;
-            // console.log(postTags);
-            // console.log(typeof(postTags));
-            // console.log('Content tags: ' + postTags);
         }
     }
 
