@@ -84,46 +84,6 @@ async function openCrawlerWeb() {
             igPostClose.click();
             await driver.sleep(1000);
         }
-
-        // sigle test
-        // const igPost = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a/div[1]`;
-        // const igPostEle = await driver.wait(until.elementLocated(By.xpath(igPost)));
-        // igPostEle.click();
-        // await driver.sleep(1000);
-        // const igPostCloseBtn = `/html/body/div[5]/div[3]/button`;
-        // const igPostClose = await driver.wait(until.elementLocated(By.xpath(igPostCloseBtn)));
-        // await driver.sleep(1000);
-        // igPostClose.click();
-        // await driver.sleep(1000);
-        
-        // var postToclickPath = driver.findElements(By.xpath("//div[@class='_9AhH0']"));
-        // console.log(postToclickPath);
-        // console.log(typeof(postToclickPath));
-        // console.log(postToclickPath[0]);
-        // var postToclickPath = driver.findElement(By.className("_9AhH0"));
-
-        // postToclickPath.click();
-        // await driver.sleep(1000);
-        // var igPostCloseBtn = `/html/body/div[5]/div[3]/button`;
-        // var igPostClose = await driver.wait(until.elementLocated(By.xpath(igPostCloseBtn)));
-        // await driver.sleep(1000);
-        // igPostClose.click();
-        // await driver.sleep(1000);
-
-        // var postToclickEle = await driver.wait(until.elementsLocated(By.xpath(postToclickPath)));
-
-        // for (var i = 0; i < 2; i++) {
-        //     var eachPostEle = postToclickPath[i];
-        //     console.log(eachPostEle);
-        //     var postToclickEle = await driver.wait(until.elementsLocated(By.xpath(eachPostEle)));
-        //     postToclickEle.click();
-        //     await driver.sleep(1000);
-        //     var igPostCloseBtn = `/html/body/div[5]/div[3]/button`;
-        //     var igPostClose = await driver.wait(until.elementLocated(By.xpath(igPostCloseBtn)));
-        //     await driver.sleep(1000);
-        //     igPostClose.click();
-        //     await driver.sleep(1000);
-        // }
     }
 
     await clickEachPost(driver);
