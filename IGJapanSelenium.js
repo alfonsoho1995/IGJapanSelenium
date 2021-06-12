@@ -62,16 +62,19 @@ async function openCrawlerWeb() {
         console.log(`${brands} ` + igTraceNum);
 
         await driver.sleep(1000);
+        await clickEachPost(driver);
     }
+
     async function clickEachPost(driver) {
 
         var threeArray = 4;
-        var lengtLine;
-
-        for (var i = 1; i < threeArray; i++) {
-            var igPostLine = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[2]/div[${i}]/a/div/div[2]`;
-            await openBatchbyBatch(igPostLine);
-            await driver.sleep(1000);
+        var lengtLine = 4;
+        for (var j = 1; j < lengtLine; j++) {
+            for (var i = 1; i < threeArray; i++) {
+                var igPostLine = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[${j}]/div[${i}]/a/div/div[2]`;
+                await openBatchbyBatch(igPostLine);
+                await driver.sleep(1000);
+            }
         }
 
         async function openBatchbyBatch() {
@@ -86,20 +89,12 @@ async function openCrawlerWeb() {
         }
     }
 
-    await clickEachPost(driver);
-}
-
-async function getAccountInfo() {
-    var accountURL = 'https://www.instagram.com/mu_mumian/';
-    
+    // await clickEachPost(driver);
 }
 
 async function main() {
     await getEnvVariable();
     await openCrawlerWeb();
-    // await getAccountInfo();
 }
-
-// openCrawlerWeb();
 
 main();
