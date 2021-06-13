@@ -39,8 +39,8 @@ async function openCrawlerWeb() {
     await driver.sleep(2000);
 
     var brandArray = [
-        'mu_mumian',
-        // 'lexus_jp',
+        // 'mu_mumian',
+        'lexus_jp',
         // 'qdymag'
     ]
 
@@ -67,22 +67,27 @@ async function openCrawlerWeb() {
 
     async function clickEachPost(driver) {
         var threeArray = 3 + 1;
-        var lengtLine = (24/3) + 1; // start from 1 so add 1
-        var count = 0
-        for (var j = 1; j < lengtLine; j++) {
+        var lengthLine = (3/3) + 1;
+        // var lengthLine = (24/3) + 1; // total/3 >> start from 1 so add 1
+        var count = 1;
+        for (var j = 1; j < lengthLine; j++) {
             for (var i = 1; i < threeArray; i++) {
                 var igPostLine = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[${j}]/div[${i}]/a/div/div[2]`;
+                var igPostURL = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a`;
+                var igPostURLEle = await driver.wait(until.elementLocated(By.xpath(igPostURL)));
+                var currentURL = await igPostURLEle.getAttribute('href');
+                console.log(currentURL);
                 await openBatchByBatch(igPostLine);
                 await driver.sleep(1000);
+                console.log(count++);
             }
-            console.log(count++);
         }
 
         async function openBatchByBatch() {
             var igPostLineEle = await driver.wait(until.elementLocated(By.xpath(igPostLine)));
             igPostLineEle.click();
             await driver.sleep(2000);
-            await getTagsEachPost(driver);
+            await getContentsEachPost(driver);
             await driver.sleep(1000);
             var igPostCloseBtn = `/html/body/div[5]/div[3]/button`;
             var igPostClose = await driver.wait(until.elementLocated(By.xpath(igPostCloseBtn)));
@@ -91,7 +96,7 @@ async function openCrawlerWeb() {
             await driver.sleep(1000);
         }
     
-        async function getTagsEachPost() {
+        async function getContentsEachPost() {
             // fetch each post content
             // await driver.findElements(By.xpath('//div[@class="C4VMK"]')).then(function(elements){
             //     for (var i = 0; i < elements.length; i++){
@@ -100,14 +105,30 @@ async function openCrawlerWeb() {
             //         });
             //     };
             // });
-
+            // fetch each post content
+            // fetch each post hashtags
             await driver.findElements(By.xpath('//a[@class=" xil3i"]')).then(function(elements){
                 for (var i = 0; i < elements.length; i++){
-                    elements[i].getText().then(function(text){
-                        console.log(text);
+                    elements[i].getText().then(function(tags){
+                        console.log(tags);
                     });
                 };
             });
+            // fetch each post hashtags
+            // fetch each post likes
+            await driver.findElements(By.xpath('/html/body/div[5]/div[2]/div/article/div[3]/section[2]/div/div/a/span')).then(function(elements){
+                for (var i = 0; i < elements.length; i++){
+                    elements[i].getText().then(function(likes){
+                        console.log(likes);
+                    });
+                };
+            });
+            // fetch each post likes
+            // fetch each post post time
+            var dateObjPath = "/html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/div/li/div/div/div[2]/div/div/time";
+            var dateObjEle = await driver.findElement(By.xpath(dateObjPath));
+            console.log(await dateObjEle.getAttribute('datetime'));
+            // fetch each post post time
         }
     }
 
