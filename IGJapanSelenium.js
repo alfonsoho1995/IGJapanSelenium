@@ -7,12 +7,12 @@ var By = webdriver.By;
 var until = webdriver.until;
 
 const URL = 'http://instagram.com/';
-const ig_username = process.env.IG_USERNAME;
-const ig_password = process.env.IG_PASSWORD;
+const igUsername = process.env.IG_USERNAME;
+const igPassword = process.env.IG_PASSWORD;
 
 async function getEnvVariable() {
-    const env_variable = process.env.test;
-    console.log(env_variable);
+    const envVariable = process.env.test;
+    console.log(envVariable);
 }
 
 async function openCrawlerWeb() {
@@ -24,17 +24,17 @@ async function openCrawlerWeb() {
     const web = URL;
     await driver.get(web);
 
-    const ig_user_element = await driver.wait(until.elementLocated(By.xpath(`//*[@id="loginForm"]/div/div[1]/div/label/input`)));
-    ig_user_element.sendKeys(ig_username);
-    const ig_password_element = await driver.wait(until.elementLocated(By.xpath(`//*[@id="loginForm"]/div/div[2]/div/label/input`)));
-    ig_password_element.sendKeys(ig_password);
-    const login_element = await driver.wait(until.elementLocated(By.xpath(`//*[@id="loginForm"]/div/div[3]`)));
-    login_element.click();
+    const igUserEle = await driver.wait(until.elementLocated(By.xpath(`//*[@id="loginForm"]/div/div[1]/div/label/input`)));
+    igUserEle.sendKeys(igUsername);
+    const igPasswordEle = await driver.wait(until.elementLocated(By.xpath(`//*[@id="loginForm"]/div/div[2]/div/label/input`)));
+    igPasswordEle.sendKeys(igPassword);
+    const loginEle = await driver.wait(until.elementLocated(By.xpath(`//*[@id="loginForm"]/div/div[3]`)));
+    loginEle.click();
     // 中間碰到 6 code 驗證
-    const wait_one = await driver.wait(until.elementLocated(By.xpath(`//*[@id="react-root"]/section/main/div/div/div/div/button`)));
-    wait_one.click();
-    const wait_two = await driver.wait(until.elementLocated(By.xpath(`/html/body/div[4]/div/div/div/div[3]/button[2]`)));
-    wait_two.click();
+    const waitOneClose = await driver.wait(until.elementLocated(By.xpath(`//*[@id="react-root"]/section/main/div/div/div/div/button`)));
+    waitOneClose.click();
+    const waitTwoClose = await driver.wait(until.elementLocated(By.xpath(`/html/body/div[4]/div/div/div/div[3]/button[2]`)));
+    waitTwoClose.click();
 
     await driver.sleep(2000);
 
