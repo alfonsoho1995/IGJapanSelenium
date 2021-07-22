@@ -2,7 +2,6 @@ require('dotenv').config();
 const webdriver = require('selenium-webdriver');
 require('chromedriver');
 
-
 var By = webdriver.By;
 var until = webdriver.until;
 
