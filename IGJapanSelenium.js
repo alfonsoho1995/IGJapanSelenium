@@ -1,6 +1,8 @@
 require('dotenv').config();
 const webdriver = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
 require('chromedriver');
+const path = require('path');
 
 
 var By = webdriver.By;
@@ -15,7 +17,15 @@ async function getEnvVariable() {
     console.log(envVariable);
 }
 
-async function openCrawlerWeb() {
+async function setChromeDriver() {
+    const chromeDriverPath = "./chromedriver";
+    const service = new chrome.ServiceBuilder(path.join(__dirname, chromeDriverPath)).build();
+    await openCrawlerWeb(service);
+}
+
+async function openCrawlerWeb(service) {
+    chrome.setDefaultService(service);
+    console.log("reset chrome driver 90");
     var chromeCapabilities = webdriver.Capabilities.chrome();
     var chromeOptions = {'args': ['--test-type', '--incognito']};
     chromeCapabilities.set('chromeOptions', chromeOptions);
@@ -137,7 +147,8 @@ async function openCrawlerWeb() {
 
 async function main() {
     await getEnvVariable();
-    await openCrawlerWeb();
+    await setChromeDriver();
+    // await openCrawlerWeb();
 }
 
 main();
