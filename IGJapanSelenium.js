@@ -127,6 +127,7 @@ async function openCrawlerWeb(service) {
             //     };
             // });
             // fetch each post content
+
             // fetch each post hashtags
             await driver.findElements(By.xpath('//a[@class=" xil3i"]')).then(function(elements){
                 for (var i = 0; i < elements.length; i++){
@@ -136,15 +137,29 @@ async function openCrawlerWeb(service) {
                 };
             });
             // fetch each post hashtags
+
             // fetch each post likes
+            // /html/body/div[6]/div[2]/div/article/div/div[3]/div/div/section[2]/div/div/a/span
             // await driver.findElements(By.xpath('/html/body/div[5]/div[2]/div/article/div[3]/section[2]/div/div/a/span')).then(function(elements){
+            // await driver.findElements(By.xpath('/html/body/div[6]/div[2]/div/article/div/div[3]/div/div/section[2]/div/div/a/span')).then(function(elements){    
             //     for (var i = 0; i < elements.length; i++){
             //         elements[i].getText().then(function(likes){
             //             console.log(likes);
             //         });
             //     };
             // });
+            // /html/body/div[6]/div[2]/div/article/div/div[2]/div/div[2]/section[2]/div/div/a/span
+            await driver.findElements(By.xpath('/html/body/div[6]/div[2]/div/article/div/div[2]/div/div[2]/section[2]/div/div/a/span')).then(function(elements){
+                for (var i = 0; i < elements.length; i++){
+                    elements[i].getText().then(function(likes){
+                        console.log(likes);
+                    });
+                };
+            });
+            // var likeObjEle = `/html/body/div[6]/div[2]/div/article/div/div[3]/div/div/section[2]/div/div/a/span`;
+            
             // fetch each post likes
+
             // fetch each post post time
             // var dateObjPath = "/html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/div/li/div/div/div[2]/div/div/time";
             // var dateObjEle = await driver.findElement(By.xpath(dateObjPath));
