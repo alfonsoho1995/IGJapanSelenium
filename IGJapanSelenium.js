@@ -40,14 +40,12 @@ async function openCrawlerWeb(service) {
     igPasswordEle.sendKeys(igPassword);
     const loginEle = await driver.wait(until.elementLocated(By.xpath(`//*[@id="loginForm"]/div/div[3]`)));
     loginEle.click();
+
     // 中間碰到 6 code 驗證
-    // const waitOneClose = await driver.wait(until.elementLocated(By.xpath(`//*[@id="react-root"]/section/main/div/div/div/div/button`)));
-    // waitOneClose.click();
-    // const waitTwoClose = await driver.wait(until.elementLocated(By.xpath(`/html/body/div[4]/div/div/div/div[3]/button[2]`)));
-    // waitTwoClose.click();
+    const waitOneClose = await driver.wait(until.elementLocated(By.xpath(`//*[@id="react-root"]/div/div/section/main/div/div/div/div/button`)));
+    waitOneClose.click();
     const waitTwoClose = await driver.wait(until.elementLocated(By.xpath(`/html/body/div[5]/div/div/div/div[3]/button[2]`)));
     waitTwoClose.click();
-    // /html/body/div[5]/div/div/div/div[3]/button[2]
 
     await driver.sleep(2000);
 
@@ -79,30 +77,32 @@ async function openCrawlerWeb(service) {
     }
 
     async function clickEachPost(driver) {
-        console.log("GET in clickEachPost function")
+        console.log("GET in clickEachPost function");
+
         var threeArray = 3 + 1;
         var lengthLine = (3/3) + 1;
         // var lengthLine = (24/3) + 1; // total/3 >> start from 1 so add 1
         var count = 1;
-        // for (var j = 1; j < lengthLine; j++) {
-            // for (var i = 1; i < threeArray; i++) {
-                // original
-                // var igPostLine = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[${j}]/div[${i}]/a/div/div[2]`;
-                // original
-                // var igPostLine = `//*[@id="react-root"]/div/div/section/main/div/div[4]/article/div[${j}]/div/div[${i}]/div[1]`
-                
-                // var igPostURL = `//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a`;
-                var igPostURL = `//*[@id="react-root"]/div/div/section/main/div/div[4]/article/div[1]/div/div[1]/div[1]/a`;
-                console.log(igPostURL);
-                var igPostURLEle = await driver.wait(until.elementLocated(By.xpath(igPostURL)));
-                console.log(igPostURLEle)
-                var currentURL = await igPostURLEle[0].href;
-                console.log(currentURL);
-                // await openBatchByBatch(igPostLine);
+        for (var j = 1; j < lengthLine; j++) {
+            for (var i = 1; i < threeArray; i++) {
+                // new
+                // 直行6
+                // `//*[@id="react-root"]/div/div/section/main/div/div[4]/article/div[1]/div/div/div[1]`
+                // 直行6
+                // 橫列3
+                // `//*[@id="react-root"]/div/div/section/main/div/div[4]/article/div[1]/div/div[1]`
+                // 橫列3
+                // `//*[@id="react-root"]/div/div/section/main/div/div[4]/article/div[1]/div/div[j]/div[i]`
+                // j 是橫列 i 是直行
+
+                // //*[@id="react-root"]/div/div/section/main/div/div[3]/article/div[1]/div/div[2]/div[1] 中間的 div[4] 不對要是 [3]
+                var igPostLine = `//*[@id="react-root"]/div/div/section/main/div/div[3]/article/div[1]/div/div[${j}]/div[${i}]`;
+                await openBatchByBatch(igPostLine);
                 await driver.sleep(1000);
-                // console.log(count++);
-            // }
-        // }
+
+                console.log(count++);
+            }
+        }
 
         async function openBatchByBatch() {
             var igPostLineEle = await driver.wait(until.elementLocated(By.xpath(igPostLine)));
@@ -110,7 +110,7 @@ async function openCrawlerWeb(service) {
             await driver.sleep(2000);
             await getContentsEachPost(driver);
             await driver.sleep(1000);
-            var igPostCloseBtn = `/html/body/div[5]/div[3]/button`;
+            var igPostCloseBtn = `/html/body/div[6]/div[3]/button`;
             var igPostClose = await driver.wait(until.elementLocated(By.xpath(igPostCloseBtn)));
             await driver.sleep(1000);
             igPostClose.click();
@@ -137,18 +137,18 @@ async function openCrawlerWeb(service) {
             });
             // fetch each post hashtags
             // fetch each post likes
-            await driver.findElements(By.xpath('/html/body/div[5]/div[2]/div/article/div[3]/section[2]/div/div/a/span')).then(function(elements){
-                for (var i = 0; i < elements.length; i++){
-                    elements[i].getText().then(function(likes){
-                        console.log(likes);
-                    });
-                };
-            });
+            // await driver.findElements(By.xpath('/html/body/div[5]/div[2]/div/article/div[3]/section[2]/div/div/a/span')).then(function(elements){
+            //     for (var i = 0; i < elements.length; i++){
+            //         elements[i].getText().then(function(likes){
+            //             console.log(likes);
+            //         });
+            //     };
+            // });
             // fetch each post likes
             // fetch each post post time
-            var dateObjPath = "/html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/div/li/div/div/div[2]/div/div/time";
-            var dateObjEle = await driver.findElement(By.xpath(dateObjPath));
-            console.log(await dateObjEle.getAttribute('datetime'));
+            // var dateObjPath = "/html/body/div[5]/div[2]/div/article/div[3]/div[1]/ul/div/li/div/div/div[2]/div/div/time";
+            // var dateObjEle = await driver.findElement(By.xpath(dateObjPath));
+            // console.log(await dateObjEle.getAttribute('datetime'));
             // fetch each post post time
         }
     }
