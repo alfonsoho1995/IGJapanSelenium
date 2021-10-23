@@ -57,6 +57,10 @@ async function openCrawlerWeb(service) {
 
     var brandArrayLength = brandArray.length;
 
+    // function sleep(ms) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    // }
+
     for (var i = 0; i < brandArrayLength; i++) {
         await getBrandInfo(driver, brandArray[i])
     }
@@ -77,7 +81,6 @@ async function openCrawlerWeb(service) {
     }
 
     async function clickEachPost(driver) {
-        console.log("GET in clickEachPost function");
 
         var threeArray = 3 + 1;
         var lengthLine = (3/3) + 1;
@@ -118,6 +121,7 @@ async function openCrawlerWeb(service) {
         }
     
         async function getContentsEachPost() {
+            
             // fetch each post content
             // await driver.findElements(By.xpath('//div[@class="C4VMK"]')).then(function(elements){
             //     for (var i = 0; i < elements.length; i++){
@@ -129,13 +133,24 @@ async function openCrawlerWeb(service) {
             // fetch each post content
 
             // fetch each post hashtags
-            await driver.findElements(By.xpath('//a[@class=" xil3i"]')).then(function(elements){
-                for (var i = 0; i < elements.length; i++){
-                    elements[i].getText().then(function(tags){
-                        console.log(tags);
-                    });
-                };
-            });
+            // will miss the last one hashtag
+            async function getHashtags() {
+                var getHashtagsMethod = await driver.findElements(By.xpath('//a[@class=" xil3i"]')).then(async function(elements){
+                    async function forLoop() {
+                        var hashtagsArray = [];
+                        for (var i = 0; i < elements.length; i++){
+                            await driver.sleep(100);
+                            elements[i].getText().then(async function(tags){
+                                await hashtagsArray.push(tags);
+                            });
+                        };
+                        return hashtagsArray; 
+                    }
+                    return await forLoop();
+                });
+                return await getHashtagsMethod;
+            }
+            console.log(await getHashtags());
             // fetch each post hashtags
 
             // fetch each post likes
