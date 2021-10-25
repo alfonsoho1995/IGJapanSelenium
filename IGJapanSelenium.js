@@ -4,6 +4,9 @@ const chrome = require('selenium-webdriver/chrome');
 require('chromedriver');
 const path = require('path');
 
+var fs = require('fs');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
 
 var By = webdriver.By;
 var until = webdriver.until;
@@ -83,7 +86,7 @@ async function openCrawlerWeb(service) {
     async function clickEachPost(driver) {
 
         var threeArray = 3 + 1;
-        var lengthLine = (3/3) + 1;
+        var lengthLine = (6/3) + 1;
         // var lengthLine = (24/3) + 1; // total/3 >> start from 1 so add 1
         var count = 1;
         for (var j = 1; j < lengthLine; j++) {
@@ -100,18 +103,18 @@ async function openCrawlerWeb(service) {
 
                 // //*[@id="react-root"]/div/div/section/main/div/div[3]/article/div[1]/div/div[2]/div[1] 中間的 div[4] 不對要是 [3]
                 var igPostLine = `//*[@id="react-root"]/div/div/section/main/div/div[3]/article/div[1]/div/div[${j}]/div[${i}]`;
-                await openBatchByBatch(igPostLine);
+                await openBatchByBatch(igPostLine, j, i);
                 await driver.sleep(1000);
 
                 console.log(count++);
             }
         }
 
-        async function openBatchByBatch() {
+        async function openBatchByBatch(igPostLine, j, i) {
             var igPostLineEle = await driver.wait(until.elementLocated(By.xpath(igPostLine)));
             igPostLineEle.click();
             await driver.sleep(2000);
-            await getContentsEachPost(driver);
+            await getContentsEachPost(driver, j, i);
             await driver.sleep(1000);
             var igPostCloseBtn = `/html/body/div[6]/div[3]/button`;
             var igPostClose = await driver.wait(until.elementLocated(By.xpath(igPostCloseBtn)));
@@ -120,7 +123,14 @@ async function openCrawlerWeb(service) {
             await driver.sleep(1000);
         }
     
-        async function getContentsEachPost() {
+        async function getContentsEachPost(driver, j, i) {
+
+            // fetch each post post time
+            var dateObjPath = "/html/body/div[6]/div[2]/div/article/div/div[2]/div/div[2]/div[2]/a/time";
+            var dateObjEle = await driver.findElement(By.xpath(dateObjPath));
+            var postTime = await dateObjEle.getAttribute('datetime');
+            console.log(postTime);
+            // fetch each post post time
             
             // fetch each post content
             // await driver.findElements(By.xpath('//div[@class="C4VMK"]')).then(function(elements){
@@ -150,7 +160,16 @@ async function openCrawlerWeb(service) {
                 });
                 return await getHashtagsMethod;
             }
-            console.log(await getHashtags());
+
+            var hashtagsAll = await getHashtags();
+            var writeStream = fs.createWriteStream(`hashtagsAll_${postTime}.csv`);
+            writeStream.write("hashtagsAll" + "\n");
+            // writeStream.write("hashtagsAll" + ',' + '\n');
+            for (var l = 0; l < hashtagsAll.length; l++) {
+                // writeStream.write(hashtagsAll[l] + ',' + '\n');
+                writeStream.write(hashtagsAll[l] + "\n");
+            }
+            
             // fetch each post hashtags
 
             // fetch each post likes
@@ -163,11 +182,7 @@ async function openCrawlerWeb(service) {
             });
             // fetch each post likes
 
-            // fetch each post post time
-            var dateObjPath = "/html/body/div[6]/div[2]/div/article/div/div[2]/div/div[2]/div[2]/a/time";
-            var dateObjEle = await driver.findElement(By.xpath(dateObjPath));
-            console.log(await dateObjEle.getAttribute('datetime'));
-            // fetch each post post time
+            
         }
     }
 
